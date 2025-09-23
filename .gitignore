@@ -1,0 +1,27 @@
+# =========================
+# Python / Django (backend)
+# =========================
+.venv/
+*.pyc
+__pycache__/
+*.sqlite3
+.env
+db.sqlite3
+static/
+media/
+
+# =========================
+# Node / React (frontend)
+# =========================
+node_modules/
+dist/
+build/
+*.log
+
+# =========================
+# VSCode / JetBrains / OS
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
