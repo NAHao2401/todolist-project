@@ -1,0 +1,33 @@
+.todos-container {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.todo-form {
+  margin-bottom: 16px;
+}
+
+.todo-input {
+  width: 75%;
+  margin-right: 8px;
+}
+
+.todo-list {
+  padding: 0;
+  list-style: none;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.todo-item span {
+  flex: 1;
+  cursor: pointer;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+}

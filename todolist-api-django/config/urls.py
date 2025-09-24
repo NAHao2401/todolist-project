@@ -26,6 +26,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 #views của JWT authentication (lấy token và refresh token)
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from todos.views import RegisterView
+
 router = DefaultRouter()
 router.register(r"todos", TodoViewSet, basename="todo")
 urlpatterns = [
@@ -37,6 +39,8 @@ urlpatterns = [
     #JWT auth
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    #Register
+    path("api/register/", RegisterView.as_view(), name="register"),
     #API
     path("api/", include(router.urls)),
 ]

@@ -39,51 +39,41 @@ export default function Todos() {
   const hasNext = Boolean(data?.next);
 
   return (
-    <div style={{ maxWidth: 600, margin: "40px auto" }}>
+    <div className="todos-container">
       <h1>Todo List</h1>
 
-      <form onSubmit={handleAdd} style={{ marginBottom: 16 }}>
+      <form onSubmit={handleAdd} className="todo-form">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Nhập công việc..."
-          style={{ width: "75%", marginRight: 8 }}
+          className="todo-input"
         />
         <button type="submit">Thêm</button>
       </form>
 
-      <ul style={{ padding: 0, listStyle: "none" }}>
+      <ul className="todo-list">
         {results.map((t) => (
-          <li
-            key={t.id}
-            style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
-          >
+          <li key={t.id} className="todo-item">
             <span
               onClick={() => toggle(t)}
-              style={{
-                flex: 1,
-                cursor: "pointer",
-                textDecoration: t.is_completed ? "line-through" : "none",
-              }}
-              title="Click để toggle trạng thái"
+              className={t.is_completed ? "todo-completed" : ""}
             >
               {t.title}
             </span>
-            <button onClick={() => remove(t.id)} style={{ marginLeft: 8 }}>
-              Xóa
-            </button>
+            <button onClick={() => remove(t.id)}>Xóa</button>
           </li>
         ))}
       </ul>
 
-      <div style={{ marginTop: 16 }}>
+      <div>
         <button
           onClick={() => setPage((p) => p - 1)}
           disabled={!hasPrev || isFetching}
         >
           ← Trang trước
         </button>
-        <span style={{ margin: "0 12px" }}>Trang {page}</span>
+        <span>Trang {page}</span>
         <button
           onClick={() => setPage((p) => p + 1)}
           disabled={!hasNext || isFetching}

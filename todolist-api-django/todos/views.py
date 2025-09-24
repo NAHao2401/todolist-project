@@ -2,7 +2,12 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import Todo
-from .serializers import TodoSerializer
+from .serializers import TodoSerializer, UserRegisterSerializer
+
+#Register
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 class TodoViewSet(ModelViewSet):
@@ -25,3 +30,13 @@ class TodoViewSet(ModelViewSet):
     #Khi user tạo một Todo mới, owner sẽ được gán tự động là user hiện tại
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+    
+class RegisterView(APIView):
+    permission_classes=[] #Bất kì ai cũng có thể gọi
+
+    def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Đăng ký thành công!"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

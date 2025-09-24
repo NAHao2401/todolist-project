@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 import environ  # Thư viện để quản lý biến môi trường (Dùng để load file .env)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -92,6 +93,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",     
     "http://127.0.0.1:5173",
 ]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Authorization",
+]
+
 
 ROOT_URLCONF = 'config.urls'
 

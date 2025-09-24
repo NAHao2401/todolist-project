@@ -11,7 +11,7 @@ const rawBaseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000/api/", // import.meta.env là cách chuẩn duy nhất mà Vite expose biến mối trường từ file .env.*
   prepareHeaders: (headers) => {
     const token = getAccessToken();
-    if (token) headers.set("Authorizations", `Bearer ${token}`); // Giúp tất cả request tự động gửi kèm token JWT (nếu có)
+    if (token) headers.set("Authorization", `Bearer ${token}`); // Giúp tất cả request tự động gửi kèm token JWT (nếu có)
     return headers;
   },
 });
