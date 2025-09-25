@@ -11,6 +11,7 @@
 .auth-card h2 {
   margin-bottom: 24px;
   font-size: 1.8rem;
+  color: #f0f0f0;
 }
 
 .auth-card input {
@@ -30,8 +31,9 @@
 }
 
 .auth-card button {
-  width: 100%;
-  padding: 12px;
+  display: block;
+  margin: 0 auto; /* căn giữa */
+  padding: 12px 32px;
   border: none;
   border-radius: 8px;
   background: linear-gradient(90deg, #646cff, #747bff);

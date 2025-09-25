@@ -20,13 +20,13 @@ from django.contrib import admin
 from django.urls import path, include
 #Giúp tự động tạo các URL cho ViewSet
 from rest_framework.routers import DefaultRouter
-from todos.views import TodoViewSet
+from todos.views import  TodoViewSet
 #Sinh OpenAPI schema và giao diện Swagger UI
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 #views của JWT authentication (lấy token và refresh token)
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from todos.views import RegisterView
+from todos.views import RegisterView, MyTokenObtainPairView
 
 router = DefaultRouter()
 router.register(r"todos", TodoViewSet, basename="todo")
@@ -37,7 +37,7 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     #JWT auth
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     #Register
     path("api/register/", RegisterView.as_view(), name="register"),

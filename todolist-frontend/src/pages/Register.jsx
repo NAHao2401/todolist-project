@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRegisterMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
+import AuthLayout from "../AuthLayout";
 
 export default function Register() {
   const [register, { isLoading }] = useRegisterMutation();
@@ -20,28 +21,30 @@ export default function Register() {
     }
   }
   return (
-    <form className="auth-card" onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUser(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPass(e.target.value)}
-      />
-      <button disabled={isLoading} type="submit">
-        Register
-      </button>
-    </form>
+    <AuthLayout>
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Register</h2>
+        <input
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUser(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPass(e.target.value)}
+        />
+        <button disabled={isLoading} type="submit">
+          Register
+        </button>
+      </form>
+    </AuthLayout>
   );
 }

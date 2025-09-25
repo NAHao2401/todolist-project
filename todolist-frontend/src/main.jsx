@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client"; //Thư viện con của React, chuyên 
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
-import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   //Truyển store Redux xuống tất cả component bên trong

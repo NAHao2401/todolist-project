@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
+import "./Todos.css";
 import {
   useGetTodosQuery,
   useAddTodoMutation,
@@ -38,49 +41,69 @@ export default function Todos() {
   const hasPrev = Boolean(data?.previous);
   const hasNext = Boolean(data?.next);
 
+  const token = localStorage.getItem("access");
+  let decoded = null;
+
+  if (token) {
+    try {
+      decoded = jwtDecode(token);
+    } catch (e) {
+      console.error("Invalid token", e);
+    }
+  }
+
   return (
     <div className="todos-container">
-      <h1>Todo List</h1>
+      <header className="header">
+        <p className="user-info">User: {decoded?.username ?? "Guest"}</p>
+        <Link className="logout" to="/login">
+          Logout
+        </Link>
+      </header>
 
-      <form onSubmit={handleAdd} className="todo-form">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Nhập công việc..."
-          className="todo-input"
-        />
-        <button type="submit">Thêm</button>
-      </form>
+      <main className="main">
+        <h1 className="title">Todo List</h1>
 
-      <ul className="todo-list">
-        {results.map((t) => (
-          <li key={t.id} className="todo-item">
-            <span
-              onClick={() => toggle(t)}
-              className={t.is_completed ? "todo-completed" : ""}
-            >
-              {t.title}
-            </span>
-            <button onClick={() => remove(t.id)}>Xóa</button>
-          </li>
-        ))}
-      </ul>
+        <form onSubmit={handleAdd} className="todo-form">
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Nhập công việc..."
+            className="todo-input"
+          />
+          <button type="submit">Thêm</button>
+        </form>
 
-      <div>
-        <button
-          onClick={() => setPage((p) => p - 1)}
-          disabled={!hasPrev || isFetching}
-        >
-          ← Trang trước
-        </button>
-        <span>Trang {page}</span>
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          disabled={!hasNext || isFetching}
-        >
-          Trang sau →
-        </button>
-      </div>
+        <ul className="todo-list">
+          {results.map((t) => (
+            <li key={t.id} className="todo-item">
+              <span
+                onClick={() => toggle(t)}
+                className={t.is_completed ? "todo-completed" : ""}
+              >
+                {t.title}
+              </span>
+              <button onClick={() => remove(t.id)}>Xóa</button>
+            </li>
+          ))}
+        </ul>
+
+        <div className="pagination">
+          <button
+            onClick={() => setPage((p) => p - 1)}
+            disabled={!hasPrev || isFetching}
+          >
+            ← Trang trước
+          </button>
+          <span>Trang {page}</span>
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={!hasNext || isFetching}
+          >
+            Trang sau →
+          </button>
+        </div>
+      </main>
     </div>
   );
 }

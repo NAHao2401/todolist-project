@@ -11,48 +11,26 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="auth-container">
-        <div className="auth-left">
-          <div className="form-wrapper">
-            <nav className="auth-nav">
-              {authed ? (
-                <>
-                  <Link to="/todos">Todos</Link>
-                  <button
-                    onClick={() => {
-                      clearTokens();
-                      location.href = "/login";
-                    }}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login">Login</Link>
-                  <Link to="/register">Register</Link>
-                </>
-              )}
-            </nav>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/todos"
-                element={
-                  <ProtectedRoute>
-                    <Todos />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </div>
-        </div>
-        <div className="auth-right">
-          <img src="bg1.png" alt="background" />
-        </div>
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Todos />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/todos"
+          element={
+            <ProtectedRoute>
+              <Todos />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }

@@ -1,0 +1,141 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* ẩn thanh cuộn */
+  background-color: #af9595cc;
+}
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  gap: 80px;
+  position: relative; /* cần để nav absolute bám vào */
+}
+.auth-container h1 {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ff6ec4, #7873f5, #4ade80, #facc15);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.auth-left,
+.auth-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Nav góc trên bên phải */
+.top-right-nav {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  gap: 24px;
+}
+
+/* Link chung */
+.auth-link {
+  font-weight: 600;
+  font-size: 2rem;
+  color: #646cff;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hiệu ứng hover */
+.auth-link:hover {
+  color: #535bf2;
+  transform: translateY(-2px);
+}
+
+.auth-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+
+.auth-link:hover::after {
+  width: 100%;
+}
+
+/* Layout trái */
+.auth-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.auth-left img {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+}
+
+.auth-text h2 {
+  font-size: 1.8rem;
+  color: #646cff;
+  margin-bottom: 12px;
+}
+
+.auth-text p {
+  font-size: 1.3rem;
+  line-height: 1.9;
+  color: #1e1e1e; /* chữ sáng hơn để đọc rõ */
+}
+/* Features list */
+.features-list {
+  margin-top: 24px;
+  padding-left: 0;
+  list-style: none;
+  font-size: 1.5rem;
+  color: #1e1e1e;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.features-list li {
+  margin-bottom: 10px;
+}
