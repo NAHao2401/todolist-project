@@ -67,7 +67,7 @@ REST_FRAMEWORK = {
     ),
     # Cấu hình phân trang
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10, # Số item trên mỗi trang
+    'PAGE_SIZE': 5, # Số item trên mỗi trang
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', # kích hoạt drf_spectacular để tự sinh tài liệu API 
 }
 

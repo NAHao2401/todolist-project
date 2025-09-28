@@ -8,87 +8,185 @@
   flex-direction: column;
 }
 
-/* Header: user trái, logout phải */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
-  background: #111;
+  padding: 0 20px;
+  background: linear-gradient(90deg, #1e1e1e, #2c2c2c);
+  border-bottom: 1px solid #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
+.header button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #b1bd48, #f71414);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+  margin: 0 12px;
+}
+
+.header button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
+}
+
+.header button:active {
+  transform: scale(0.97);
+}
+
 .user-info {
-  font-size: 1rem;
-  color: #bbb;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #ddd;
+  font-weight: 500;
+  gap: 10px;
+}
+
+/* Avatar giả */
+.user-info::before {
+  content: "👤";
+  font-size: 1.2rem;
 }
 
 .logout {
   text-decoration: none;
-  color: #ff6b6b;
+  padding: 8px 18px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #ff6b6b, #ff8787);
+  color: #fff;
   font-weight: 600;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(255, 107, 107, 0.4);
 }
+
 .logout:hover {
-  color: #ff8787;
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ff8787, #ff6b6b);
 }
 
 /* Main content */
 .main {
   flex: 1;
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 20px;
+}
+.hidden {
+  display: none !important;
+}
+/* Form ở bên trái */
+.form-wrapper {
+  flex: 0 0 320px; /* chiều rộng cố định */
+}
+
+/* Nội dung Todo ở giữa */
+.content-wrapper {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
 }
 
 .title {
-  font-size: 2.2rem;
-  color: #646cff;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ff6ec4, #7873f5, #4ade80, #facc15);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 6s ease infinite;
+  margin-top: 0;
+  margin-bottom: 40px;
 }
 
-/* Form thêm todo */
 .todo-form {
+  background: #1e1e1e;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  margin: 20px auto;
   display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
-  width: 100%;
-  max-width: 600px;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.todo-input {
-  flex: 1;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  color: #bbb;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.todo-input,
+.todo-textarea {
   padding: 12px;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #333;
   background: #2c2c2c;
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  transition: border 0.2s, box-shadow 0.2s;
 }
-.todo-input:focus {
+
+.todo-input:focus,
+.todo-textarea:focus {
   outline: none;
   border: 1px solid #646cff;
+  box-shadow: 0 0 6px #646cff66;
+}
+
+.todo-textarea {
+  resize: vertical; /* Cho phép kéo to/nhỏ theo chiều dọc */
 }
 
 .todo-form button {
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(90deg, #646cff, #747bff);
+  background: linear-gradient(90deg, #46e969, #74e3ff);
   color: #fff;
   font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
   transition: transform 0.2s, opacity 0.2s;
 }
+
 .todo-form button:hover {
   transform: scale(1.05);
   opacity: 0.9;
 }
 
 /* Todo list */
+.list-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 800px; /* cho rộng hơn để chứa cả ul và nút */
+  gap: 20px;
+  padding-left: 190px;
+}
 .todo-list {
   list-style: none;
   width: 100%;
@@ -98,39 +196,126 @@
 }
 
 .todo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background: #2c2c2c;
+  font-size: 25px;
   padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  border-radius: 15px;
+  margin-bottom: 18px;
   transition: background 0.2s, transform 0.2s;
-}
-.todo-item:hover {
-  background: #343434;
-  transform: translateX(4px);
-}
-.todo-item span {
-  flex: 1;
   cursor: pointer;
 }
-.todo-completed {
-  text-decoration: line-through;
-  color: #888;
+
+.todo-item:hover {
+  background: #3a3a3a;
 }
-.todo-item button {
-  background: #ff6b6b;
-  border: none;
+
+.todo-item.active {
+  background: #343434;
+}
+
+.todo-completed {
+  background: #1ed63d;
+}
+
+.todo-extra {
+  background: #1e1e1e;
+  margin: -4px 0 12px 0; /* dính liền với li ở trên */
+  padding: 12px 16px;
+  border-left: 3px solid #646cff;
+  border-right: 3px solid #646cff;
+  border-radius: 0 0 25px 25px;
+  animation: slideDown 0.25s ease;
+}
+
+.todo-description {
+  color: #bbb;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.todo-actions button {
   padding: 6px 12px;
+  border: none;
   border-radius: 6px;
-  color: #fff;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
-.todo-item button:hover {
-  background: #ff8787;
+
+.todo-actions button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.todo-actions button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Màu nút */
+.todo-actions button:nth-child(1) {
+  background: #4ade80; /* xanh lá cho Finish */
+  color: #fff;
+}
+.todo-actions button:nth-child(2) {
+  background: #facc15; /* vàng cho Update */
+  color: #000;
+}
+.todo-actions button:nth-child(3) {
+  background: #ef4444; /* đỏ cho Delete */
+  color: #fff;
+}
+
+/* Hiệu ứng trượt xuống */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filters button {
+  padding: 10px 16px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: #1ea11e;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left; /* chữ thẳng hàng về bên trái */
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(139, 155, 52, 0.2);
+}
+
+.filters button:hover {
+  background: #3a3a3a;
+  color: #fff;
+  border-color: #c5c745;
+  transform: translateX(3px);
+}
+
+.filters button.active {
+  background: linear-gradient(90deg, #646cff, #747bff);
+  color: #fff;
+  border: none;
+  box-shadow: 0 3px 10px rgba(100, 108, 255, 0.4);
 }
 
 /* Pagination */
