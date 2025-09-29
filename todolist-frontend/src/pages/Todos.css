@@ -59,6 +59,62 @@
   font-size: 1.2rem;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* khoảng cách nhỏ giữa Setting và Logout */
+}
+
+.settings-container > button {
+  font-size: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  background: #e6e2e2;
+  color: #070606;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.settings-container > button:hover {
+  background: #3a3a3a;
+}
+
+.settings-panel {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  padding: 6px 0;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.settings-panel button {
+  background: none; /* bỏ gradient */
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  width: 100%;
+  font-size: 0.95rem;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.2s, padding-left 0.2s;
+}
+
+.settings-panel button:hover {
+  background: #333;
+  color: #fff;
+}
+
 .logout {
   text-decoration: none;
   padding: 8px 18px;
@@ -115,7 +171,7 @@
 }
 
 .todo-form {
-  background: #1e1e1e;
+  background: #d4692e;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
@@ -133,8 +189,7 @@
 }
 
 .form-group label {
-  color: #bbb;
-  font-size: 0.95rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -196,30 +251,132 @@
 }
 
 .todo-item {
-  background: #2c2c2c;
-  font-size: 25px;
-  padding: 12px 16px;
-  border-radius: 15px;
-  margin-bottom: 18px;
-  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  background: #2b2b2b;
+  font-size: 1.1rem;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
   cursor: pointer;
 }
 
 .todo-item:hover {
   background: #3a3a3a;
+  transform: translateY(-2px); /* nhích nhẹ lên */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .todo-item.active {
-  background: #343434;
+  background: #1f1f1f;
+  border: 1px solid #646cff; /* viền highlight */
+  box-shadow: 0 4px 14px rgba(100, 108, 255, 0.4);
+}
+
+.todo-item span {
+  flex: 1;
+  color: #eee;
+  font-weight: 500;
+  overflow-wrap: anywhere; /* tránh tràn chữ */
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #facc15;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 1px solid #333;
+  width: 100%; /* chiếm hết li */
+  box-sizing: border-box;
+}
+
+.edit-form label {
+  margin-bottom: -5px;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.edit-form input,
+.edit-form textarea {
+  padding: 12px 14px; /* padding hợp lý */
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2c2c2c;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 100%; /* ô nhập chiếm toàn form */
+  box-sizing: border-box; /* tránh tràn */
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  outline: none;
+  border: 1px solid #646cff;
+  box-shadow: 0 0 6px #646cff55;
+}
+
+.edit-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.4;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* nút nằm bên phải */
+}
+
+.edit-actions button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.edit-actions button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.edit-actions button:first-child {
+  background: linear-gradient(90deg, #4ade80, #22c55e); /* xanh lá */
+  color: #fff;
+}
+
+.edit-actions button:last-child {
+  background: #444;
+  color: #ddd;
 }
 
 .todo-completed {
-  background: #1ed63d;
+  text-decoration: line-through;
+  color: #aaa; /* xám nhạt */
+  opacity: 0.8; /* hơi mờ để phân biệt */
+  position: relative;
+  padding-right: 24px; /* chừa chỗ cho dấu check */
+}
+
+.todo-completed::after {
+  content: "✔"; /* dấu tích */
+  color: #4ade80; /* xanh lá nhạt, dễ nhìn */
+  font-weight: bold;
+  position: absolute;
+  right: 0; /* dính vào bên phải */
 }
 
 .todo-extra {
   background: #1e1e1e;
-  margin: -4px 0 12px 0; /* dính liền với li ở trên */
+  margin: -12px 0 16px 0; /* dính liền với li ở trên */
   padding: 12px 16px;
   border-left: 3px solid #646cff;
   border-right: 3px solid #646cff;
@@ -229,21 +386,22 @@
 
 .todo-description {
   color: #bbb;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
   font-style: italic;
 }
 
 .todo-actions {
   display: flex;
   gap: 8px;
+  padding-top: 7px;
 }
 
 .todo-actions button {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, opacity 0.2s;
@@ -319,11 +477,22 @@
 }
 
 /* Pagination */
+/* giữ pagination dính dưới container */
 .pagination {
+  margin-top: auto;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 16px;
+  padding: 16px;
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0 0 12px 12px; /* bo góc dưới đẹp hơn */
 }
+
 .pagination button {
   padding: 8px 16px;
   border-radius: 8px;

@@ -23,14 +23,23 @@ export default function Todos() {
 
   const [selectedId, setSelectedId] = useState(null);
 
+  const [editingId, setEditingId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+
+  const [filter, setFilter] = useState("all");
+
+  const [showSetting, setShowSetting] = useState(false);
+
   if (isLoading) return <p> Dang tải...</p>;
   if (error) return <p>Có lỗi khi tải dữ liệu</p>;
 
   async function handleAdd(e) {
     e.preventDefault();
     if (!title.trim()) return; //.trim() loại bỏ khoảng trắng ở đầu và cuối chuỗi. Điều kiện rỗng -> điều kiện đúng
-    await addTodo({ title, description: "", is_completed: false });
+    await addTodo({ title, description, is_completed: false });
     setTitle("");
+    setDescription("");
   }
 
   async function toggle(todo) {
@@ -42,7 +51,7 @@ export default function Todos() {
   }
 
   const results = data?.results ?? [];
-  console.log(results);
+
   //Trả về dữ liệu phân trang nên trong format trả về sẽ có: previous và next để xác định url trước và sau
   const hasPrev = Boolean(data?.previous);
   const hasNext = Boolean(data?.next);
@@ -58,6 +67,13 @@ export default function Todos() {
     }
   }
 
+  let filteredResults = results;
+  if (filter === "done") {
+    filteredResults = results.filter((t) => t.is_completed);
+  } else if (filter === "pending") {
+    filteredResults = results.filter((t) => !t.is_completed);
+  }
+
   return (
     <div className="todos-container">
       <header className="header">
@@ -65,9 +81,22 @@ export default function Todos() {
         <button onClick={() => setShowForm((prev) => !prev)}>
           {showForm ? "Close" : "Add To Do"}
         </button>
-        <Link className="logout" to="/login">
-          Logout
-        </Link>
+        <div className="header-right">
+          <div className="settings-container">
+            <button onClick={() => setShowSetting((prev) => !prev)}>
+              Setting
+            </button>
+            {showSetting && (
+              <div className="settings-panel">
+                <button>Đổi mật khẩu</button>
+              </div>
+            )}
+          </div>
+
+          <Link className="logout" to="/login">
+            Logout
+          </Link>
+        </div>
       </header>
       <main className="main">
         <div className={`form-wrapper ${showForm ? "" : "hidden"}`}>
@@ -102,7 +131,7 @@ export default function Todos() {
 
           <div className="list-section">
             <ul className="todo-list">
-              {results.map((t) => (
+              {filteredResults.map((t) => (
                 <React.Fragment key={t.id}>
                   <li
                     className={`todo-item ${
@@ -112,11 +141,46 @@ export default function Todos() {
                       setSelectedId(t.id === selectedId ? null : t.id)
                     }
                   >
-                    <span className={t.is_completed ? "todo-completed" : ""}>
-                      {t.title}
-                    </span>
+                    {editingId === t.id ? (
+                      <div className="edit-form">
+                        <label>Title:</label>
+                        <input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          placeholder="Nhập công việc mới..."
+                        />
+                        <label>Description:</label>
+                        <textarea
+                          value={editDescription}
+                          onChange={(e) => setEditDescription(e.target.value)}
+                          placeholder="Nhập mô tả chi tiết mới..."
+                        />
+                        <div className="edit-actions">
+                          <button
+                            onClick={async () => {
+                              await updateTodo({
+                                id: t.id,
+                                title: editTitle,
+                                description: editDescription,
+                              });
+                              setEditingId(null);
+                            }}
+                          >
+                            Save
+                          </button>
+                          <button onClick={() => setEditingId(null)}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className={t.is_completed ? "todo-completed" : ""}>
+                        {t.title}
+                      </span>
+                    )}
                   </li>
-                  {selectedId === t.id && (
+
+                  {selectedId === t.id && editingId !== t.id && (
                     <div className="todo-extra">
                       <span className="todo-description">
                         {t.description || "Chưa có mô tả"}
@@ -125,7 +189,13 @@ export default function Todos() {
                         <button onClick={() => toggle(t)}>
                           {t.is_completed ? "Unfinish" : "Finish"}
                         </button>
-                        <button onClick={() => alert("Update form ở đây")}>
+                        <button
+                          onClick={() => {
+                            setEditingId(t.id);
+                            setEditTitle(t.title);
+                            setEditDescription(t.description);
+                          }}
+                        >
                           Update
                         </button>
                         <button onClick={() => remove(t.id)}>Delete</button>
@@ -137,9 +207,24 @@ export default function Todos() {
             </ul>
 
             <div className="filters">
-              <button onClick={() => setFilter("")}>All Tasks</button>
-              <button onClick={() => setFilter("")}>Done</button>
-              <button onClick={() => setFilter("")}>Pending</button>
+              <button
+                className={filter === "all" ? "active" : ""}
+                onClick={() => setFilter("all")}
+              >
+                All Tasks
+              </button>
+              <button
+                className={filter === "pending" ? "active" : ""}
+                onClick={() => setFilter("pending")}
+              >
+                Pending
+              </button>
+              <button
+                className={filter === "done" ? "active" : ""}
+                onClick={() => setFilter("done")}
+              >
+                Done
+              </button>
             </div>
           </div>
 
