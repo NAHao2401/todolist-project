@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearTokens } from "../lib/storage";
+import { todosApi } from "../api/todosApi";
+import { authApi } from "../api/authApi";
 import "./Todos.css";
+import { useChangePasswordMutation } from "../api/authApi";
 import {
   useGetTodosQuery,
   useAddTodoMutation,
@@ -30,6 +35,23 @@ export default function Todos() {
   const [filter, setFilter] = useState("all");
 
   const [showSetting, setShowSetting] = useState(false);
+
+  const [showChangePass, setShowChangePass] = useState(false);
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [changePassword] = useChangePasswordMutation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  function handleLogout() {
+    clearTokens();
+    // reset toàn bộ cache của RTK Query
+    dispatch(todosApi.util.resetApiState());
+    dispatch(authApi.util.resetApiState());
+    navigate("/login", { replace: true });
+  }
 
   if (isLoading) return <p> Dang tải...</p>;
   if (error) return <p>Có lỗi khi tải dữ liệu</p>;
@@ -88,14 +110,16 @@ export default function Todos() {
             </button>
             {showSetting && (
               <div className="settings-panel">
-                <button>Đổi mật khẩu</button>
+                <button onClick={() => setShowChangePass(true)}>
+                  Đổi mật khẩu
+                </button>
               </div>
             )}
           </div>
 
-          <Link className="logout" to="/login">
+          <button className="logout" onClick={handleLogout}>
             Logout
-          </Link>
+          </button>
         </div>
       </header>
       <main className="main">
@@ -131,101 +155,108 @@ export default function Todos() {
 
           <div className="list-section">
             <ul className="todo-list">
-              {filteredResults.map((t) => (
-                <React.Fragment key={t.id}>
-                  <li
-                    className={`todo-item ${
-                      t.id === selectedId ? "active" : ""
-                    }`}
-                    onClick={() =>
-                      setSelectedId(t.id === selectedId ? null : t.id)
-                    }
-                  >
-                    {editingId === t.id ? (
-                      <div className="edit-form">
-                        <label>Title:</label>
-                        <input
-                          value={editTitle}
-                          onChange={(e) => setEditTitle(e.target.value)}
-                          placeholder="Nhập công việc mới..."
-                        />
-                        <label>Description:</label>
-                        <textarea
-                          value={editDescription}
-                          onChange={(e) => setEditDescription(e.target.value)}
-                          placeholder="Nhập mô tả chi tiết mới..."
-                        />
-                        <div className="edit-actions">
+              {filteredResults.length === 0 ? (
+                <li className="todo-empty">Bạn chưa có công việc nào 📋</li>
+              ) : (
+                filteredResults.map((t) => (
+                  <React.Fragment key={t.id}>
+                    <li
+                      className={`todo-item ${
+                        t.id === selectedId ? "active" : ""
+                      }`}
+                      onClick={() =>
+                        setSelectedId(t.id === selectedId ? null : t.id)
+                      }
+                    >
+                      {editingId === t.id ? (
+                        <div className="edit-form">
+                          <label>Title:</label>
+                          <input
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            placeholder="Nhập công việc mới..."
+                          />
+                          <label>Description:</label>
+                          <textarea
+                            value={editDescription}
+                            onChange={(e) => setEditDescription(e.target.value)}
+                            placeholder="Nhập mô tả chi tiết mới..."
+                          />
+                          <div className="edit-actions">
+                            <button
+                              onClick={async () => {
+                                await updateTodo({
+                                  id: t.id,
+                                  title: editTitle,
+                                  description: editDescription,
+                                });
+                                setEditingId(null);
+                              }}
+                            >
+                              Save
+                            </button>
+                            <button onClick={() => setEditingId(null)}>
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <span
+                          className={t.is_completed ? "todo-completed" : ""}
+                        >
+                          {t.title}
+                        </span>
+                      )}
+                    </li>
+
+                    {selectedId === t.id && editingId !== t.id && (
+                      <div className="todo-extra">
+                        <span className="todo-description">
+                          {t.description || "Chưa có mô tả"}
+                        </span>
+                        <div className="todo-actions">
+                          <button onClick={() => toggle(t)}>
+                            {t.is_completed ? "Unfinish" : "Finish"}
+                          </button>
                           <button
-                            onClick={async () => {
-                              await updateTodo({
-                                id: t.id,
-                                title: editTitle,
-                                description: editDescription,
-                              });
-                              setEditingId(null);
+                            onClick={() => {
+                              setEditingId(t.id);
+                              setEditTitle(t.title);
+                              setEditDescription(t.description);
                             }}
                           >
-                            Save
+                            Update
                           </button>
-                          <button onClick={() => setEditingId(null)}>
-                            Cancel
-                          </button>
+                          <button onClick={() => remove(t.id)}>Delete</button>
                         </div>
                       </div>
-                    ) : (
-                      <span className={t.is_completed ? "todo-completed" : ""}>
-                        {t.title}
-                      </span>
                     )}
-                  </li>
-
-                  {selectedId === t.id && editingId !== t.id && (
-                    <div className="todo-extra">
-                      <span className="todo-description">
-                        {t.description || "Chưa có mô tả"}
-                      </span>
-                      <div className="todo-actions">
-                        <button onClick={() => toggle(t)}>
-                          {t.is_completed ? "Unfinish" : "Finish"}
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingId(t.id);
-                            setEditTitle(t.title);
-                            setEditDescription(t.description);
-                          }}
-                        >
-                          Update
-                        </button>
-                        <button onClick={() => remove(t.id)}>Delete</button>
-                      </div>
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
+                  </React.Fragment>
+                ))
+              )}
             </ul>
-
-            <div className="filters">
-              <button
-                className={filter === "all" ? "active" : ""}
-                onClick={() => setFilter("all")}
-              >
-                All Tasks
-              </button>
-              <button
-                className={filter === "pending" ? "active" : ""}
-                onClick={() => setFilter("pending")}
-              >
-                Pending
-              </button>
-              <button
-                className={filter === "done" ? "active" : ""}
-                onClick={() => setFilter("done")}
-              >
-                Done
-              </button>
-            </div>
+            {filteredResults.length > 0 && (
+              <div className="filters">
+                <button
+                  className={filter === "all" ? "active" : ""}
+                  onClick={() => setFilter("all")}
+                >
+                  All Tasks
+                </button>
+                <button
+                  className={filter === "pending" ? "active" : ""}
+                  onClick={() => setFilter("pending")}
+                >
+                  Pending
+                </button>
+                <button
+                  className={filter === "done" ? "active" : ""}
+                  onClick={() => setFilter("done")}
+                >
+                  Done
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="pagination">
@@ -244,6 +275,79 @@ export default function Todos() {
             </button>
           </div>
         </div>
+
+        {showChangePass && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Đổi mật khẩu</h2>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (newPass !== confirmPass) {
+                    alert("Mật khẩu xác nhận không khớp!");
+                    return;
+                  }
+                  try {
+                    await changePassword({ oldPass, newPass }).unwrap();
+                    alert("Đổi mật khẩu thành công!");
+                    setShowChangePass(false);
+                    setOldPass("");
+                    setNewPass("");
+                    setConfirmPass("");
+                  } catch {
+                    alert("Đổi mật khẩu thất bại. Kiểm tra lại.");
+                  }
+                }}
+              >
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Mật khẩu cũ"
+                  value={oldPass}
+                  onChange={(e) => setOldPass(e.target.value)}
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Mật khẩu mới"
+                  value={newPass}
+                  onChange={(e) => setNewPass(e.target.value)}
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Xác nhận mật khẩu mới"
+                  value={confirmPass}
+                  onChange={(e) => setConfirmPass(e.target.value)}
+                />
+
+                {/* Checkbox show/hide password */}
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={showPassword}
+                    onChange={() => setShowPassword((prev) => !prev)}
+                  />
+                  Hiển thị mật khẩu
+                </label>
+
+                <div style={{ marginTop: "12px" }}>
+                  <button type="submit">Xác nhận</button>
+                  <button
+                    type="button"
+                    onClick={() => setShowChangePass(false)}
+                  >
+                    Hủy
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

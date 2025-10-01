@@ -25,3 +25,26 @@ class TodoSerializer(serializers.ModelSerializer):#ModelSerializer = serializer 
         fields = ["id", "title", "description", "is_completed",
                   "created_at", "updated_at", "owner"]
         read_only_fields = ["id", "created_at", "updated_at", "owner"]
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=6)
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Mật khẩu cũ không đúng")
+        return value
+    
+    def validate_new_password(self, value):
+        # Bạn có thể thêm quy tắc mạnh hơn (chữ hoa, số, ký tự đặc biệt)
+        if len(value) < 6:
+            raise serializers.ValidationError("Mật khẩu mới quá ngắn (tối thiểu 6 ký tự).")
+        return value
+
+    def save(self, **kwargs):
+        user = self.context["request"].user
+        new_password = self.validated_data["new_password"]
+        user.set_password(new_password)
+        user.save()
+        return user

@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 #Giúp tự động tạo các URL cho ViewSet
 from rest_framework.routers import DefaultRouter
-from todos.views import  TodoViewSet
+from todos.views import  ChangePasswordView, TodoViewSet
 #Sinh OpenAPI schema và giao diện Swagger UI
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 #views của JWT authentication (lấy token và refresh token)
@@ -41,6 +41,8 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     #Register
     path("api/register/", RegisterView.as_view(), name="register"),
+    #ChangePasswrod
+    path("api/change-password/", ChangePasswordView.as_view(), name="change-password"),
     #API
     path("api/", include(router.urls)),
 ]

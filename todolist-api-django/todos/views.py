@@ -2,7 +2,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from .models import Todo
-from .serializers import TodoSerializer, UserRegisterSerializer
+from .serializers import ChangePasswordSerializer, TodoSerializer, UserRegisterSerializer
 
 #Register
 from rest_framework.views import APIView
@@ -45,3 +45,13 @@ class RegisterView(APIView):
     
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Đổi mật khẩu thành công"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

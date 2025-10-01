@@ -1,12 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { setTokens, clearTokens } from "../lib/storage";
+import baseQueryWithReauth from "../lib/baseQuery";
 
 export const authApi = createApi({
   reducerPath: "authApi", //tên nhánh trong Redux store để RTK Query biết dữ liệu auth sẽ lưu ở đâu
-  baseQuery: fetchBaseQuery({
-    // Mọi endpoint trong authApi sẽ gọi API dựa trên baseUrl này
-    baseUrl: import.meta.env.VITE_API_BASE ?? "http://127.0.0.1:8000/api/",
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation({
       //builder.mutation: dùng chô các hành động thay đổi dữ liệu (POST/PUT/DELETE). login là dạng mutation
@@ -34,7 +32,18 @@ export const authApi = createApi({
         body: { username, password, email },
       }),
     }),
+    changePassword: builder.mutation({
+      query: ({ oldPass, newPass }) => ({
+        url: "change-password/",
+        method: "POST",
+        body: { old_password: oldPass, new_password: newPass },
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useChangePasswordMutation,
+} = authApi;

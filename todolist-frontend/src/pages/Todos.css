@@ -116,19 +116,21 @@
 }
 
 .logout {
-  text-decoration: none;
-  padding: 8px 18px;
-  border-radius: 15px;
-  background: linear-gradient(135deg, #ff6b6b, #ff8787);
-  color: #fff;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 8px rgba(255, 107, 107, 0.4);
+  padding: 8px 16px !important;
+  border: 1px solid #e74c3c !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #e74c3c !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease !important;
 }
 
 .logout:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #ff8787, #ff6b6b);
+  background: #e74c3c !important;
+  color: #fff !important;
+  transform: scale(1.03) !important;
 }
 
 /* Main content */
@@ -248,6 +250,14 @@
   max-width: 600px;
   padding: 0;
   margin: 0 0 24px 0;
+}
+
+.todo-empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.8rem;
+  color: #deee52;
+  font-style: italic;
 }
 
 .todo-item {
@@ -509,4 +519,110 @@
 .pagination span {
   font-weight: bold;
   color: #ddd;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #2c2c2c;
+  padding: 20px 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.modal-content button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+} /* Style input trong modal */
+.modal-content input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1e1e1e;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.modal-content input:focus {
+  border: 1px solid #646cff;
+  box-shadow: 0 0 5px #646cff66;
+  outline: none;
+}
+
+/* Checkbox show password */
+.modal-content label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ddd;
+  margin-top: 4px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+}
+
+.modal-content input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Nút xác nhận & hủy */
+.modal-content button {
+  margin-right: 10px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.modal-content button[type="submit"] {
+  background: linear-gradient(90deg, #4ade80, #22c55e); /* xanh lá */
+  color: #fff;
+}
+
+.modal-content button[type="button"] {
+  background: #444;
+  color: #ddd;
+}
+
+.modal-content button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }
